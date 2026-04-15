@@ -4,7 +4,7 @@ Section: utils
 Priority: optional
 Architecture: amd64
 Essential: no
-Depends: docker-ce, docker-compose-plugin, git, curl, jq, wget, openssl, gnupg, lsb-release, software-properties-common
+Depends: curl, wget, git, jq, openssl, ca-certificates, lsb-release
 Maintainer: Bijaya Pokhrel <merobiju@gmail.com>
 Description: Immich Smart Installer - Bijaya Pokhrel
  यो प्याकेजले तपाईंको Ubuntu/Debian प्रणालीमा Immich फोटो ब्याकअप
