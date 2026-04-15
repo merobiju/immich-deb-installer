@@ -1,0 +1,8 @@
+Package: immich-smart-installer
+Version: 1.0.0
+Section: utils
+Priority: optional
+Architecture: all
+Maintainer: Bijaya Pokhrel <merobiju@gmail.com>
+Description: Immich Smart Installer for Easy Setup
+Depends: curl, git, docker-ce (>= 20.10.0)
