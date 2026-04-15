@@ -2,9 +2,9 @@
 set -e
 
 # =============================================
-# IMMICH SMART INSTALLER - बिजय पोख्रेल
+# IMMICH SMART INSTALLER - POSTINST संस्करण
+# लेखक: बिजय पोख्रेल
 # 📞 +977 9851125758  |  📧 merobiju@gmail.com
-# .deb पोस्टइन्स्ट स्क्रिप्ट संस्करण
 # =============================================
 
 RED='\033[0;31m'
@@ -21,6 +21,32 @@ echo -e "${YELLOW}          📞 +977 9851125758${NC}"
 echo -e "${YELLOW}          📧 merobiju@gmail.com${NC}"
 echo -e "${BLUE}════════════════════════════════════════════════════════${NC}"
 echo ""
+
+# =============================================
+# DOCKER सेवा जाँच र सुरु
+# =============================================
+echo -e "${YELLOW}🔧 Docker सेवा जाँच गर्दै...${NC}"
+if systemctl is-active --quiet docker; then
+    echo -e "${GREEN}✓ Docker सेवा पहिले नै चलिरहेको छ${NC}"
+else
+    echo -e "${YELLOW}⚠ Docker सेवा सुरु गर्दै...${NC}"
+    systemctl start docker
+    systemctl enable docker
+    echo -e "${GREEN}✓ Docker सेवा सुरु भयो${NC}"
+fi
+
+# Docker कमाण्ड चल्ने सुनिश्चित
+if ! command -v docker &> /dev/null; then
+    echo -e "${RED}❌ Docker फेला परेन। कृपया 'docker-ce' प्याकेज जाँच गर्नुहोस्।${NC}"
+    exit 1
+fi
+
+if ! docker compose version &> /dev/null; then
+    echo -e "${RED}❌ Docker Compose फेला परेन। कृपया 'docker-compose-plugin' प्याकेज जाँच गर्नुहोस्।${NC}"
+    exit 1
+fi
+
+echo -e "${GREEN}✓ Docker र Compose तयार छन्${NC}"
 
 # =============================================
 # अपरेटिङ सिस्टम पहिचान
@@ -49,7 +75,7 @@ echo -e "${GREEN}✓ OS: $OS${NC}"
 echo -e "${GREEN}✓ आर्किटेक्चर: $ARCH${NC}"
 
 # =============================================
-# ब्राउजर जाँच र स्थापना (अन्तरक्रिया बिना)
+# ब्राउजर जाँच (स्वचालित)
 # =============================================
 if ! command -v firefox &> /dev/null && ! command -v google-chrome &> /dev/null && ! command -v chromium-browser &> /dev/null; then
     echo -e "${YELLOW}⚠ कुनै ब्राउजर फेला परेन। Firefox स्थापना गर्दै...${NC}"
@@ -90,23 +116,6 @@ while ss -tuln | grep -q ":$PORT "; do
     PORT=$((PORT + 1))
 done
 echo -e "${GREEN}✓ उपलब्ध पोर्ट: $PORT${NC}"
-
-# =============================================
-# DOCKER स्थापना (स्वचालित)
-# =============================================
-if ! command -v docker &> /dev/null; then
-    echo -e "${YELLOW}📦 Docker स्थापना गर्दै...${NC}"
-    curl -fsSL https://get.docker.com | sh
-    usermod -aG docker ${SUDO_USER:-$USER}
-    systemctl start docker
-    systemctl enable docker
-    echo -e "${GREEN}✓ Docker स्थापित भयो${NC}"
-fi
-
-if ! docker compose version &> /dev/null; then
-    echo -e "${YELLOW}📦 Docker Compose स्थापना गर्दै...${NC}"
-    apt update && apt install -y docker-compose-plugin
-fi
 
 # =============================================
 # IMMICH सेटअप
@@ -220,7 +229,7 @@ else
 fi
 
 # =============================================
-# TAILSCALE स्थापना (अन्तरक्रिया बिना)
+# TAILSCALE सेटअप स्क्रिप्ट
 # =============================================
 if ! command -v tailscale &> /dev/null; then
     echo -e "${YELLOW}🔒 Tailscale स्थापना गर्दै...${NC}"
@@ -283,9 +292,9 @@ chmod +x ~/Desktop/Tailscale-Setup.desktop
 cp ~/Desktop/Immich-Photos.desktop /usr/share/applications/ 2>/dev/null || true
 
 # =============================================
-# आइकन बनाउने
+# आइकन बनाउने (Base64 बाट)
 # =============================================
-echo "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" | base64 -d | tee /usr/share/pixmaps/immich.png > /dev/null
+echo "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" | base64 -d | tee /usr/share/pixmaps/immich.png > /dev/null
 
 # =============================================
 # प्रमाणहरू सुरक्षित गर्ने
