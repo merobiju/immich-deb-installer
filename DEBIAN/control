@@ -2,7 +2,19 @@ Package: immich-smart-installer
 Version: 1.0.0
 Section: utils
 Priority: optional
-Architecture: all
+Architecture: amd64
+Essential: no
+Depends: docker-ce, docker-compose-plugin, git, curl, jq, wget, openssl, gnupg, lsb-release, software-properties-common
 Maintainer: Bijaya Pokhrel <merobiju@gmail.com>
-Description: Immich Smart Installer for Easy Setup
-Depends: curl, git, docker-ce (>= 20.10.0)
+Description: Immich Smart Installer - Bijaya Pokhrel
+ यो प्याकेजले तपाईंको Ubuntu/Debian प्रणालीमा Immich फोटो ब्याकअप
+ सर्भर पूर्ण रूपमा स्वचालित तरिकाले स्थापना गर्दछ।
+ .
+ विशेषताहरू:
+   * हार्डवेयर एक्सेलरेसन जाँच
+   * RAM अनुसार स्वचालित ट्युनिङ
+   * ML सुविधा सक्रिय/निष्क्रिय
+   * Tailscale रिमोट एक्सेस
+   * डेस्कटप सर्टकट
+ .
+ सम्पर्क: 📞 +977 9851125758  |  📧 merobiju@gmail.com
